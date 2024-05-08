@@ -1,0 +1,100 @@
+GLOBAL    T=300 DopingScale=1e19  ResistiveMetal = False
+
+# Create an initial simulation mesh
+MESH   Type = S_Hex8
+
+X.MESH    WIDTH=0.001  N.SPACES=1
+X.MESH    WIDTH=0.012  N.SPACES=6
+X.MESH    WIDTH=0.022  N.SPACES=22
+X.MESH    WIDTH=0.012  N.SPACES=6
+X.MESH    WIDTH=0.001  N.SPACES=1
+Y.MESH    DEPTH=0.020  N.SPACES=4
+Y.MESH    DEPTH=0.040  N.SPACES=80
+Y.MESH    DEPTH=0.040  N.SPACES=4
+Z.MESH    WIDTH=0.003  N.SPACES=3
+Z.MESH    WIDTH=0.014  N.SPACES=28
+Z.MESH    WIDTH=0.003  N.SPACES=3
+
+
+#Specify Surce and drain
+REGION    Label=Source  Material=Si   X.MIN=0.001     X.MAX=0.013     Y.MIN=0.020     Y.MAX=0.060     Z.MIN=0.0       Z.MAX=0.020
+REGION    Label=Drain   Material=Si   X.MIN=0.035     X.MAX=0.047     Y.MIN=0.020     Y.MAX=0.060     Z.MIN=0.0       Z.MAX=0.020
+
+#Gate
+REGION    Label=Gate     Material=NPoly X.MIN=0.018   X.MAX=0.030  Y.MIN=0.0    Y.MAX=0.060       Z.min=0.0   Z.max=0.020
+
+#Oxide stack
+REGION Label=Channel1_HfO2   Material=HfO2   X.MIN=0.018 X.MAX=0.030  Y.MIN=0.028   Y.MAX=0.037     Z.min=0.003   Z.max=0.017
+REGION Label=Channel1_SiO2   Material=SiO2   X.MIN=0.018 X.MAX=0.030  Y.MIN=0.0295    Y.MAX=0.0355      Z.min=0.0045   Z.max=0.0155
+
+REGION Label=Channel2_HfO2   Material=HfO2   X.MIN=0.018 X.MAX=0.030  Y.MIN=0.045    Y.MAX=0.054       Z.min=0.003   Z.max=0.017
+REGION Label=Channel2_SiO2   Material=SiO2   X.MIN=0.018 X.MAX=0.030  Y.MIN=0.0465    Y.MAX=0.0525       Z.min=0.0045   Z.max=0.0155
+
+#Spacer
+REGION Label=SPS Material=Nitride   X.MIN=0.013   X.MAX=0.018  Y.MIN=0.0   Y.MAX=0.060   Z.MIN=0.0   Z.MAX=0.020
+REGION Label=SPD Material=Nitride   X.MIN=0.030   X.MAX=0.035  Y.MIN=0.0   Y.MAX=0.060   Z.MIN=0.0   Z.MAX=0.020
+
+#Channel
+REGION Label=Source_Ext1   Material=Si   X.MIN=0.013   X.MAX=0.018   Y.MIN=0.030  Y.MAX=0.035   Z.MIN=0.005  Z.MAX=0.015
+REGION Label=Channel1      Material=Si   X.MIN=0.018   X.MAX=0.030   Y.MIN=0.030  Y.MAX=0.035   Z.MIN=0.005  Z.MAX=0.015
+REGION Label=Drain_Ext1    Material=Si   X.MIN=0.030   X.MAX=0.035   Y.MIN=0.030  Y.MAX=0.035   Z.MIN=0.005  Z.MAX=0.015
+
+REGION Label=Source_Ext2   Material=Si    X.MIN=0.013    X.MAX=0.018     Y.MIN=0.047   Y.MAX=0.052    Z.MIN=0.005    Z.MAX=0.015
+REGION Label=Channel2      Material=Si    X.MIN=0.018    X.MAX=0.030     Y.MIN=0.047   Y.MAX=0.052    Z.MIN=0.005    Z.MAX=0.015
+REGION Label=Drain_Ext2    Material=Si    X.MIN=0.030    X.MAX=0.035     Y.MIN=0.047   Y.MAX=0.052    Z.MIN=0.005    Z.MAX=0.015
+
+
+#Al contacts
+REGION    Label=Source_Contact  Material=Al    X.MIN=0.000   X.MAX=0.001    Y.MIN=0.020   Y.MAX=0.060    Z.MIN=0.0   Z.MAX=0.020
+REGION    Label=Drain_Contact   Material=Al    X.MIN=0.047   X.MAX=0.048    Y.MIN=0.020   Y.MAX=0.060    Z.MIN=0.0   Z.MAX=0.020
+
+#Buried oxide
+REGION Label=Box    Material=Ox     X.MIN=0.0       X.MAX=0.048     Y.MIN=0.060     Y.MAX=0.100     Z.MIN=0.0       Z.MAX=0.020
+
+#Doping
+DOPING Type=Analytic
+Profile  Ion=Donor   Type=Uniform  N.Peak=1.0E19    X.MIN=0.001   X.MAX=0.013    Y.MIN=0.020   Y.MAX=0.060   Z.MIN=0.0    Z.MAX=0.020
+Profile  Ion=Donor   Type=Uniform  N.Peak=1.0E19    X.MIN=0.013   X.MAX=0.018    Y.MIN=0.030   Y.MAX=0.035   Z.MIN=0.005  Z.MAX=0.015
+Profile  Ion=Donor   Type=Uniform  N.Peak=1.0E19    X.MIN=0.013   X.MAX=0.018    Y.MIN=0.047   Y.MAX=0.052   Z.MIN=0.005  Z.MAX=0.015
+
+Profile  Ion=Acceptor     Type=Uniform   N.peak=1.0E15   X.MIN=0.018    X.MAX=0.030     Y.MIN=0.030    Y.MAX=0.035    Z.MIN=0.005   Z.MAX=0.015
+Profile  Ion=Acceptor     Type=Uniform   N.peak=1.0E15   X.MIN=0.018    X.MAX=0.030     Y.MIN=0.047    Y.MAX=0.052    Z.MIN=0.005   Z.MAX=0.015
+
+Profile  Ion=Donor   Type=Uniform  N.Peak=1.0E19    X.MIN=0.035   X.MAX=0.047    Y.MIN=0.020   Y.MAX=0.060   Z.MIN=0.0    Z.MAX=0.020
+Profile  Ion=Donor   Type=Uniform  N.Peak=1.0E19    X.MIN=0.030   X.MAX=0.035    Y.MIN=0.030   Y.MAX=0.035   Z.MIN=0.005  Z.MAX=0.015
+Profile  Ion=Donor   Type=Uniform  N.Peak=1.0E19    X.MIN=0.030   X.MAX=0.035    Y.MIN=0.047   Y.MAX=0.052   Z.MIN=0.005  Z.MAX=0.015
+
+EXPORT   VTKFILE=GAA12_Structure.vtk CGNSFILE=GAA12_Structure.cgns
+
+Contact ID=Gate Type=Gate workfunction=4.6
+
+PMI Region=Source_Ext1  Type=Mobility  Model=Lombardi
+PMI Region=Channel1     Type=Mobility  Model=Lombardi
+PMI Region=Drain_Ext1   Type=Mobility  Model=Lombardi
+Model Region=Source_Ext1  Fermi=true   srh.tat=true
+Model Region=Channel2     Fermi=true   srh.tat=true
+Model Region=Drain_Ext1   Fermi=true   srh.tat=true
+
+PMI Region=Source_Ext2  Type=Mobility  Model=Lombardi
+PMI Region=Channel2     Type=Mobility  Model=Lombardi
+PMI Region=Drain_Ext2   Type=Mobility  Model=Lombardi
+Model Region=Source_Ext2  Fermi=true   srh.tat=true
+Model Region=Channel2     Fermi=true   srh.tat=true  
+Model Region=Drain_Ext2   Fermi=true   srh.tat=true 
+
+Vsource Type = VDC    ID = GND    Tdelay=0   Vconst=0
+Vsource Type = VDC    ID = VD     Tdelay=0   Vconst=0.8
+
+ATTACH    Elec=Drain_Contact   Vapp=VD
+ATTACH    Elec=Source_Contact  Vapp=GND
+
+METHOD   Type=Poisson
+SOLVE
+
+Method Type=DDML1 Ns=Basic
+Solve Type=Equ
+
+METHOD    Type=DDML1 NS=Newton LS=MUMPS maxiteration=50
+SOLVE     Type=DC  Vscan=Gate   Vstart=0 Vstep=0.05  Vstop=0.8  out.prefix=GAA12 
+
+EXPORT CGNSFile=GAA12.cgns  VTKFILE=GAA12.vtu
