@@ -1,0 +1,21 @@
+# do global settings
+Global T=300 DopingScale=1.0000000000000000e+20 Z.Width=1
+ 
+# do import source
+Import CGNSFile="/home/ubuntu/Desktop/FYP2024-MOSHEMT/mosh_contd result/struct.cgns"
+ 
+VSource Type=VDC ID=gateConst VConst=1
+VSource Type=VDC ID=sourceConst VConst=0
+VSource Type=VDC ID=substrateConst VConst=0
+Method Type=Poisson damping=Potential ns=Basic
+Solve
+Method Type="DDML1" damping=Potential ns=Basic
+Solve Type=Equilibrium
+Method Type="DDML1" NS=Basic ls=MUMPS
+Solve Type=DC Label="ramp1" VScan=gate VStart=0 VStop=1 VStep=0.2 out.prefix="ramp1"
+Attach Electrode=gate Vapp=gateConst
+Attach Electrode=source Vapp=sourceConst
+Attach Electrode=substrate Vapp=substrateConst
+Hook Load=vtk
+Solve Type=DC Label=result VScan=drain VStart=0 VStop=15 VStep=0.5 out.prefix=result
+Export VtkFile="result.vtu" CgnsFile="result.cgns"
